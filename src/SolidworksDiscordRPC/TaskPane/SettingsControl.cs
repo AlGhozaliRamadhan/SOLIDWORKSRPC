@@ -5,6 +5,15 @@ using System.Windows.Forms;
 
 namespace SolidworksDiscordRPC.TaskPane
 {
+    // ReSharper disable once InconsistentNaming
+    static class NativeMethods
+    {
+        internal const int EM_SETCUEBANNER = 0x1501;
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        internal static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, string lParam);
+    }
+
     /// <summary>
     /// WinForms settings panel hosted inside the SolidWorks Task Pane.
     /// Must be COM-visible with a ProgId so SolidWorks can instantiate it via
@@ -105,9 +114,10 @@ namespace SolidworksDiscordRPC.TaskPane
             {
                 MaxLength = 100,
                 Width = 250,
-                Margin = new Padding(0, 0, 0, 4),
-                PlaceholderText = "e.g. Formula SAE Chassis"
+                Margin = new Padding(0, 0, 0, 4)
             };
+            _txtProjectName.HandleCreated += (s, e) =>
+                NativeMethods.SendMessage(_txtProjectName.Handle, NativeMethods.EM_SETCUEBANNER, IntPtr.Zero, "e.g. Formula SAE Chassis");
             _txtProjectName.TextChanged += (s, e) => OnAnyPresenceCheckChanged();
 
             grpPresenceFlow.Controls.Add(lblProjectName);
