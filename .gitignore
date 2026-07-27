@@ -1,0 +1,81 @@
+# AI agent config
+.claude/
+.gemini/
+
+# Build outputs
+bin/
+obj/
+
+# Visual Studio
+*.user
+.vs/
+*.suo
+*.userosscache
+*.sln.docstates
+*.cache
+*.log
+
+# Machine-specific SolidWorks install path (copy from .example)
+SolidWorks.local.props
+
+# NuGet
+packages/
+*.nupkg
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+._*
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# NCrunch
+*.ncrunchproject
+*.ncrunchsolution
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Ll]og/
+[Ll]ogs/
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+TestResult.xml
+
+# Misc
+*.pidb
+*.pdb
+*.mdb
+*.opendb
+*.opensdf
+*.sdf
+*.ipch
+*.aps
+*.ncb
+*.scc
+*.svd
+*.psess
+*.vsp
+*.vspx
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pfx
+*.publishsettings

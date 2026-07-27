@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidworksDiscordRPC", "src\SolidworksDiscordRPC\SolidworksDiscordRPC.csproj", "{2F6A6B2E-9F10-4B7B-9C7A-E3D9B9B46B1D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F6A6B2E-9F10-4B7B-9C7A-E3D9B9B46B1D}.Debug|x64.ActiveCfg = Debug|x64
+		{2F6A6B2E-9F10-4B7B-9C7A-E3D9B9B46B1D}.Debug|x64.Build.0 = Debug|x64
+		{2F6A6B2E-9F10-4B7B-9C7A-E3D9B9B46B1D}.Release|x64.ActiveCfg = Release|x64
+		{2F6A6B2E-9F10-4B7B-9C7A-E3D9B9B46B1D}.Release|x64.Build.0 = Release|x64
+		{2F6A6B2E-9F10-4B7B-9C7A-E3D9B9B46B1D}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{2F6A6B2E-9F10-4B7B-9C7A-E3D9B9B46B1D}.Release|Any CPU.ActiveCfg = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

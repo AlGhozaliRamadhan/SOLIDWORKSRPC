@@ -1,0 +1,90 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Builds as net48 for production (SolidWorks COM add-in must be Framework).
+         ReferenceAssemblies lets `dotnet build` work even without VS targeting packs.
+         When SolidWorksInteropPath is present we use real interop DLLs; otherwise fallback
+         to InteropStubs so CI / machines without SolidWorks can still compile. -->
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>SolidworksDiscordRPC</AssemblyName>
+    <RootNamespace>SolidworksDiscordRPC</RootNamespace>
+    <Product>SOLIDWORKS Design – Discord Rich Presence</Product>
+    <Description>Shows the active SOLIDWORKS Design document on Discord Rich Presence.</Description>
+    <Copyright>SOLIDWORKS Design Discord RPC</Copyright>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <ComVisible>true</ComVisible>
+    <Guid>2f6a6b2e-9f10-4b7b-9c7a-e3d9b9b46b1d</Guid>
+    <DefineConstants Condition="'$(SolidWorksInteropPath)' != ''">$(DefineConstants);HAVE_SOLIDWORKS</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Machine-specific SolidWorks interop path lives in SolidWorks.local.props (gitignored).
+       Auto-discovered via registry + common paths if not already set. -->
+  <Import Project="..\..\SolidWorks.local.props" Condition="Exists('..\..\SolidWorks.local.props')" />
+
+  <ItemGroup>
+    <PackageReference Include="DiscordRichPresence" Version="1.6.1.70" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+
+  <!-- Auto-discover SolidWorks install when props file is missing -->
+  <PropertyGroup Condition="'$(SolidWorksInteropPath)' == ''">
+    <SolidWorksInteropPath Condition="Exists('$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\SolidWorks\SOLIDWORKS)')">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\SolidWorks\SOLIDWORKS)\api\redist</SolidWorksInteropPath>
+  </PropertyGroup>
+
+  <Target Name="DiscoverSolidWorksInterop" BeforeTargets="BeforeBuild" Condition="'$(SolidWorksInteropPath)' == ''">
+    <PropertyGroup>
+      <_ProbeA>C:\Program Files\SOLIDWORKS Corp\SOLIDWORKS\api\redist</_ProbeA>
+      <_ProbeB>C:\Program Files\SOLIDWORKS\api\redist</_ProbeB>
+      <_ProbeC>D:\SOLIDWORKS Corp\SOLIDWORKS\api\redist</_ProbeC>
+      <_ProbeD>E:\SOLIDWORKS Corp\SOLIDWORKS\api\redist</_ProbeD>
+      <_ProbeE>C:\Program Files\SOLIDWORKS Corp\SOLIDWORKS(2024)\api\redist</_ProbeE>
+      <_ProbeF>C:\Program Files\SOLIDWORKS Corp\SOLIDWORKS(2025)\api\redist</_ProbeF>
+      <_ProbeG>C:\Program Files\SOLIDWORKS Corp\SOLIDWORKS(2026)\api\redist</_ProbeG>
+    </PropertyGroup>
+    <PropertyGroup Condition="Exists('$(_ProbeA)')"><SolidWorksInteropPath>$(_ProbeA)</SolidWorksInteropPath></PropertyGroup>
+    <PropertyGroup Condition="'$(SolidWorksInteropPath)' == '' and Exists('$(_ProbeB)')"><SolidWorksInteropPath>$(_ProbeB)</SolidWorksInteropPath></PropertyGroup>
+    <PropertyGroup Condition="'$(SolidWorksInteropPath)' == '' and Exists('$(_ProbeC)')"><SolidWorksInteropPath>$(_ProbeC)</SolidWorksInteropPath></PropertyGroup>
+    <PropertyGroup Condition="'$(SolidWorksInteropPath)' == '' and Exists('$(_ProbeD)')"><SolidWorksInteropPath>$(_ProbeD)</SolidWorksInteropPath></PropertyGroup>
+    <PropertyGroup Condition="'$(SolidWorksInteropPath)' == '' and Exists('$(_ProbeE)')"><SolidWorksInteropPath>$(_ProbeE)</SolidWorksInteropPath></PropertyGroup>
+    <PropertyGroup Condition="'$(SolidWorksInteropPath)' == '' and Exists('$(_ProbeF)')"><SolidWorksInteropPath>$(_ProbeF)</SolidWorksInteropPath></PropertyGroup>
+    <PropertyGroup Condition="'$(SolidWorksInteropPath)' == '' and Exists('$(_ProbeG)')"><SolidWorksInteropPath>$(_ProbeG)</SolidWorksInteropPath></PropertyGroup>
+    <Message Condition="'$(SolidWorksInteropPath)' != ''" Importance="high" Text="Auto-discovered SOLIDWORKS at: $(SolidWorksInteropPath) — writing SolidWorks.local.props for future builds." />
+    <WriteLinesToFile Condition="'$(SolidWorksInteropPath)' != ''"
+      File="$(MSBuildProjectDirectory)\..\..\SolidWorks.local.props"
+      Overwrite="true"
+      Lines='&lt;Project&gt;;  &lt;PropertyGroup&gt;;    &lt;SolidWorksInteropPath&gt;$(SolidWorksInteropPath)&lt;/SolidWorksInteropPath&gt;;  &lt;/PropertyGroup&gt;;&lt;/Project&gt;' />
+    <Message Condition="'$(SolidWorksInteropPath)' == ''" Importance="high" Text="SOLIDWORKS not found — building with InteropStubs. Copy SolidWorks.local.props.example -> SolidWorks.local.props for full build." />
+  </Target>
+
+  <ItemGroup Condition="'$(SolidWorksInteropPath)' != '' and Exists('$(SolidWorksInteropPath)\SolidWorks.Interop.sldworks.dll')">
+    <Reference Include="SolidWorks.Interop.sldworks">
+      <HintPath>$(SolidWorksInteropPath)\SolidWorks.Interop.sldworks.dll</HintPath>
+      <Private>False</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="SolidWorks.Interop.swpublished">
+      <HintPath>$(SolidWorksInteropPath)\SolidWorks.Interop.swpublished.dll</HintPath>
+      <Private>False</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="SolidWorks.Interop.swconst">
+      <HintPath>$(SolidWorksInteropPath)\SolidWorks.Interop.swconst.dll</HintPath>
+      <Private>False</Private>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Compile Remove="InteropStubs\**\*.cs" />
+  </ItemGroup>
+
+  <Target Name="PostBuildRegasm" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug' and '$(AutoRegasm)' == 'true'">
+    <Message Text="Running regasm /codebase $(TargetPath) ..." Importance="high" />
+    <Exec Command="&quot;$(WINDIR)\Microsoft.NET\Framework64\v4.0.30319\regasm.exe&quot; /codebase &quot;$(TargetPath)&quot;" />
+  </Target>
+
+</Project>

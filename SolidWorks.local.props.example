@@ -1,0 +1,28 @@
+<!--
+  SolidWorks.local.props — gitignored, machine-specific.
+
+  You normally don't need to create this manually anymore:
+  - `dotnet build` auto-discovers SolidWorks from registry + common paths
+    (C:\ and D:\ drives) and writes this file for you.
+  - `scripts/install.ps1` does the same.
+
+  This .example file is a template for when auto-discovery fails (custom install
+  drive, portable install, etc.). Copy it to SolidWorks.local.props at repo root
+  and edit the path below.
+
+  Typical interop DLL locations:
+    C:\Program Files\SOLIDWORKS Corp\SOLIDWORKS\api\redist
+    D:\SOLIDWORKS Corp\SOLIDWORKS\api\redist
+    C:\Program Files\SOLIDWORKS\api\redist
+
+  It must contain these three DLLs:
+    SolidWorks.Interop.sldworks.dll
+    SolidWorks.Interop.swpublished.dll
+    SolidWorks.Interop.swconst.dll
+-->
+<Project>
+  <PropertyGroup>
+    <!-- Change this to where your api\redist folder actually is -->
+    <SolidWorksInteropPath>C:\Program Files\SOLIDWORKS Corp\SOLIDWORKS\api\redist</SolidWorksInteropPath>
+  </PropertyGroup>
+</Project>
