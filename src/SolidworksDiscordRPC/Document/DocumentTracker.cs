@@ -248,10 +248,7 @@ namespace SolidworksDiscordRPC
                     }
                 }
 
-                if (!wroteSomething)
-                {
-                    stateBuilder.Append($"Working in SOLIDWORKS Design");
-                }
+                // Intentionally leave state empty if no features are being tracked.
             }
             else
             {
@@ -364,7 +361,7 @@ namespace SolidworksDiscordRPC
             _lastFeatureCount = 0;
             _lastHasFeatureCount = false;
 
-            _presence.SetPresence("No document open", "Idle — SOLIDWORKS Design");
+            _presence.SetPresence("No document open", "");
         }
 
         private static string DocTypeName(int swDocType)

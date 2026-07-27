@@ -27,6 +27,10 @@ namespace SolidworksDiscordRPC
 
         public bool ConnectToSW(object ThisSW, int Cookie)
         {
+            // IMPORTANT: Prevent SolidWorks from capturing Console output and spawning an unwanted Chromium debugger window
+            Console.SetOut(System.IO.TextWriter.Null);
+            System.Diagnostics.Trace.Listeners.Clear();
+
             _swApp = (ISldWorks)ThisSW;
             _addinCookie = Cookie;
 

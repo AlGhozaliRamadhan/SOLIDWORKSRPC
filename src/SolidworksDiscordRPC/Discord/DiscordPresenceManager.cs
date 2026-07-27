@@ -28,11 +28,9 @@ namespace SolidworksDiscordRPC
 
             try
             {
-                _client = new DiscordRpcClient(DiscordApplicationId)
-                {
-                    // No logger — ConsoleLogger can trigger unwanted console/Chromium
-                    // windows when running as a SolidWorks COM add-in (no console host).
-                };
+                // Pass NullLogger into the constructor. If we use the object initializer, 
+                // the default ConsoleLogger fires inside the constructor and opens the window anyway.
+                _client = new DiscordRpcClient(DiscordApplicationId, -1, new DiscordRPC.Logging.NullLogger());
 
                 _client.OnReady += (sender, e) =>
                 {
@@ -48,7 +46,7 @@ namespace SolidworksDiscordRPC
                 IsInitialized = true;
 
                 // Show something immediately; DocumentTracker's first poll overwrites this.
-                SetPresence("No document open", "Idle — SOLIDWORKS Design");
+                SetPresence("No document open", "");
             }
             catch (Exception)
             {
