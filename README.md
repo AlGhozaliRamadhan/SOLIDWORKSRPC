@@ -57,6 +57,17 @@ Run as Administrator:
   "src\SolidworksDiscordRPC\bin\Debug\net48\SolidworksDiscordRPC.dll"
 ```
 
+## Quick Start
+
+For those who just want it running:
+
+```
+git clone https://github.com/AlGhozaliRamadhan/SOLIDWORKSRPC.git
+cd SOLIDWORKSRPC
+```
+
+Then right-click `install.bat` and select **Run as Administrator**. Open SOLIDWORKS and your Discord status will update automatically.
+
 ## Verify
 
 1. Open SOLIDWORKS and Discord.
