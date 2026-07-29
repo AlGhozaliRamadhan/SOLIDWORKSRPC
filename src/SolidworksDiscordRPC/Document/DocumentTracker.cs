@@ -33,8 +33,6 @@ namespace SolidworksDiscordRPC
         private string _lastTitle;
         private int _lastDocType = -1;
         private bool _wasIdle = true;
-        private bool _lastDirty;
-        private bool _lastRebuild;
         private string _lastMaterial;
         private int _lastFeatureCount;
         private bool _lastHasFeatureCount;
@@ -111,7 +109,6 @@ namespace SolidworksDiscordRPC
                         HideFileName = _settings.HideFileName,
                         ShowFeatureCount = _settings.ShowFeatureCount,
                         ShowMaterial = _settings.ShowMaterial,
-                        ShowDirtyIndicator = _settings.ShowDirtyIndicator,
                         CustomProjectName = _settings.CustomProjectName
                     };
                 }
@@ -153,8 +150,6 @@ namespace SolidworksDiscordRPC
                 && info.PathName == _lastPath
                 && info.Title == _lastTitle
                 && info.DocType == _lastDocType
-                && info.IsDirty == _lastDirty
-                && info.NeedsRebuild == _lastRebuild
                 && info.MaterialName == _lastMaterial
                 && info.FeatureCount == _lastFeatureCount
                 && info.HasFeatureCount == _lastHasFeatureCount;
@@ -168,8 +163,6 @@ namespace SolidworksDiscordRPC
             _lastPath = info.PathName;
             _lastTitle = info.Title;
             _lastDocType = info.DocType;
-            _lastDirty = info.IsDirty;
-            _lastRebuild = info.NeedsRebuild;
             _lastMaterial = info.MaterialName;
             _lastFeatureCount = info.FeatureCount;
             _lastHasFeatureCount = info.HasFeatureCount;
@@ -234,35 +227,12 @@ namespace SolidworksDiscordRPC
                     wroteSomething = true;
                 }
 
-                if (settings.ShowDirtyIndicator)
-                {
-                    string dirty = DirtyLabel(info);
-                    if (!string.IsNullOrEmpty(dirty))
-                    {
-                        if (wroteSomething)
-                        {
-                            stateBuilder.Append(" | ");
-                        }
-                        stateBuilder.Append(dirty);
-                        wroteSomething = true;
-                    }
-                }
-
                 // Intentionally leave state empty if no features are being tracked.
             }
             else
             {
                 // Filename shown in Details, so State = "Editing a Part" + optional extras
                 stateBuilder.Append($"Editing {ArticleFor(docTypeName)} {docTypeName}");
-
-                if (settings.ShowDirtyIndicator)
-                {
-                    string dirty = DirtyLabel(info);
-                    if (!string.IsNullOrEmpty(dirty))
-                    {
-                        stateBuilder.Append($" {dirty}");
-                    }
-                }
 
                 // Append feature count / material as suffix if enabled, keeping under 128 chars
                 var extras = new StringBuilder();
@@ -307,20 +277,7 @@ namespace SolidworksDiscordRPC
             };
         }
 
-        private static string DirtyLabel(EnrichedDocInfo info)
-        {
-            if (info.NeedsRebuild)
-            {
-                return "(Needs rebuild)";
-            }
 
-            if (info.IsDirty)
-            {
-                return "(Unsaved changes)";
-            }
-
-            return null;
-        }
 
         private static string ArticleFor(string noun)
         {
@@ -355,8 +312,6 @@ namespace SolidworksDiscordRPC
             _lastPath = null;
             _lastTitle = null;
             _lastDocType = -1;
-            _lastDirty = false;
-            _lastRebuild = false;
             _lastMaterial = null;
             _lastFeatureCount = 0;
             _lastHasFeatureCount = false;

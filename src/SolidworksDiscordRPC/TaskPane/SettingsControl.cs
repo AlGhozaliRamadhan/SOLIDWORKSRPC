@@ -28,7 +28,6 @@ namespace SolidworksDiscordRPC.TaskPane
         private CheckBox _chkHideFileName;
         private CheckBox _chkFeatureCount;
         private CheckBox _chkMaterial;
-        private CheckBox _chkDirty;
         private CheckBox _chkAutoLoad;
         private TextBox _txtProjectName;
         private Button _btnOpenFolder;
@@ -92,13 +91,11 @@ namespace SolidworksDiscordRPC.TaskPane
             _chkHideFileName = CreateCheckBox("Hide file name (privacy mode)", "Shows only \"Editing a Part/Assembly\" instead of the real file name.");
             _chkFeatureCount = CreateCheckBox("Show feature count", "Adds e.g. \"| 42 features\" to the status line when available.");
             _chkMaterial = CreateCheckBox("Show material name", "Adds material e.g. \"| 6061 Aluminum\" for parts when available.");
-            _chkDirty = CreateCheckBox("Show unsaved / needs-rebuild indicator", "Adds \"(Unsaved changes)\" or \"(Needs rebuild)\" when relevant.");
 
             grpPresenceFlow.Controls.Add(_chkEnabled);
             grpPresenceFlow.Controls.Add(_chkHideFileName);
             grpPresenceFlow.Controls.Add(_chkFeatureCount);
             grpPresenceFlow.Controls.Add(_chkMaterial);
-            grpPresenceFlow.Controls.Add(_chkDirty);
 
             // Project name input
             var lblProjectName = new Label
@@ -181,7 +178,6 @@ namespace SolidworksDiscordRPC.TaskPane
             _chkHideFileName.CheckedChanged += (s, e) => OnAnyPresenceCheckChanged();
             _chkFeatureCount.CheckedChanged += (s, e) => OnAnyPresenceCheckChanged();
             _chkMaterial.CheckedChanged += (s, e) => OnAnyPresenceCheckChanged();
-            _chkDirty.CheckedChanged += (s, e) => OnAnyPresenceCheckChanged();
             _chkAutoLoad.CheckedChanged += (s, e) => OnAutoLoadCheckChanged();
 
             flow.ResumeLayout(false);
@@ -256,7 +252,6 @@ namespace SolidworksDiscordRPC.TaskPane
                 _chkHideFileName.Checked = settings.HideFileName;
                 _chkFeatureCount.Checked = settings.ShowFeatureCount;
                 _chkMaterial.Checked = settings.ShowMaterial;
-                _chkDirty.Checked = settings.ShowDirtyIndicator;
                 _txtProjectName.Text = settings.CustomProjectName ?? "";
 
                 _autoLoadSupported = autoLoadSupported;
@@ -277,7 +272,6 @@ namespace SolidworksDiscordRPC.TaskPane
             _chkHideFileName.Enabled = enabled;
             _chkFeatureCount.Enabled = enabled;
             _chkMaterial.Enabled = enabled;
-            _chkDirty.Enabled = enabled;
             _txtProjectName.Enabled = enabled;
         }
 
@@ -296,7 +290,6 @@ namespace SolidworksDiscordRPC.TaskPane
                 HideFileName = _chkHideFileName.Checked,
                 ShowFeatureCount = _chkFeatureCount.Checked,
                 ShowMaterial = _chkMaterial.Checked,
-                ShowDirtyIndicator = _chkDirty.Checked,
                 CustomProjectName = _txtProjectName.Text?.Trim() ?? ""
             };
 

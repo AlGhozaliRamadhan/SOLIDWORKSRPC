@@ -14,7 +14,6 @@ namespace SolidworksDiscordRPC
         public bool HideFileName { get; set; } = false;
         public bool ShowFeatureCount { get; set; } = true;
         public bool ShowMaterial { get; set; } = true;
-        public bool ShowDirtyIndicator { get; set; } = true;
         public string CustomProjectName { get; set; } = "";
 
         private static readonly object SyncRoot = new object();
@@ -37,7 +36,6 @@ namespace SolidworksDiscordRPC
                 TryParseBool(json, "HideFileName", v => settings.HideFileName = v);
                 TryParseBool(json, "ShowFeatureCount", v => settings.ShowFeatureCount = v);
                 TryParseBool(json, "ShowMaterial", v => settings.ShowMaterial = v);
-                TryParseBool(json, "ShowDirtyIndicator", v => settings.ShowDirtyIndicator = v);
                 TryParseString(json, "CustomProjectName", v => settings.CustomProjectName = v);
                 return settings;
             }
@@ -59,7 +57,6 @@ namespace SolidworksDiscordRPC
                         $"  \"HideFileName\": {HideFileName.ToString().ToLowerInvariant()},\r\n" +
                         $"  \"ShowFeatureCount\": {ShowFeatureCount.ToString().ToLowerInvariant()},\r\n" +
                         $"  \"ShowMaterial\": {ShowMaterial.ToString().ToLowerInvariant()},\r\n" +
-                        $"  \"ShowDirtyIndicator\": {ShowDirtyIndicator.ToString().ToLowerInvariant()},\r\n" +
                         $"  \"CustomProjectName\": \"{EscapeJson(CustomProjectName ?? "")}\"\r\n" +
                         "}\r\n";
 
