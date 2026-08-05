@@ -46,7 +46,7 @@ namespace SolidworksDiscordRPC
                 IsInitialized = true;
 
                 // Show something immediately; DocumentTracker's first poll overwrites this.
-                SetPresence("No document open", "");
+                SetPresence("No document open", null);
             }
             catch (Exception)
             {

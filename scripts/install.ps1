@@ -112,7 +112,7 @@ try {
         foreach ($name in @("SolidWorks.Interop.sldworks.dll","SolidWorks.Interop.swpublished.dll","SolidWorks.Interop.swconst.dll")) {
             $src = Join-Path $interopPath $name
             $dst = Join-Path $dllDir $name
-            if ((Test-Path $src) -and (-not (Test-Path $dst))) {
+            if (Test-Path $src) {
                 Copy-Item $src $dst -Force
             }
         }
@@ -131,6 +131,16 @@ if ($LASTEXITCODE -ne 0) {
         Write-Error "regasm failed. Try closing SolidWorks first, then run again as Admin. Exit code $LASTEXITCODE"
     }
 }
+
+# Force automatic turn on for current user to avoid confusion
+try {
+    $guid = "{2f6a6b2e-9f10-4b7b-9c7a-e3d9b9b46b1d}"
+    $keyPath = "HKCU:\Software\SolidWorks\AddInsStartup\$guid"
+    if (-not (Test-Path $keyPath)) {
+        New-Item -Path $keyPath -Force -ErrorAction SilentlyContinue | Out-Null
+    }
+    Set-ItemProperty -Path $keyPath -Name "(default)" -Value 1 -Type DWord -ErrorAction SilentlyContinue
+} catch {}
 
 Write-Host ""
 Write-Host "Add-in registered!" -ForegroundColor Green

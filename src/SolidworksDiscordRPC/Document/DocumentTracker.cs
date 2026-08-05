@@ -266,7 +266,7 @@ namespace SolidworksDiscordRPC
             string state = stateBuilder.ToString();
             if (string.IsNullOrEmpty(state))
             {
-                state = $"Editing {ArticleFor(docTypeName)} {docTypeName}";
+                state = settings.HideFileName ? null : $"Editing {ArticleFor(docTypeName)} {docTypeName}";
             }
 
             return new PresenceLines
@@ -316,7 +316,7 @@ namespace SolidworksDiscordRPC
             _lastFeatureCount = 0;
             _lastHasFeatureCount = false;
 
-            _presence.SetPresence("No document open", "");
+            _presence.SetPresence("No document open", null);
         }
 
         private static string DocTypeName(int swDocType)
